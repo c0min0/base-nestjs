@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  mariadb:
+    image: mariadb:latest
+    container_name: mariadb
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: effect_on_nestjs_db
+    ports:
+      - "3306:3306"
+    volumes:
+      - effect_on_nestjs_db_data:/var/lib/mysql
+
+volumes:
+  effect_on_nestjs_db_data:
