@@ -1,0 +1,19 @@
+meta {
+  name: Find / Mine
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/todos/:id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: 
+}
+
+settings {
+  encodeUrl: true
+}

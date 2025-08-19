@@ -1,0 +1,22 @@
+meta {
+  name: Login (Admin)
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/auth/login
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "username": "{{admin}}",
+    "password": "{{adminPass}}"
+  }
+}
+
+settings {
+  encodeUrl: true
+}

@@ -1,0 +1,40 @@
+meta {
+  name: Create
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/users
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "email": "user01@mail.com",
+    "username": "user01",
+    "password": "123456",
+    "birthDate": "1996-12-18",
+    "roles": [
+      "user"
+    ]
+  }
+}
+
+settings {
+  encodeUrl: true
+}
+
+docs {
+  ### Body DTO
+  ```json
+  {
+    email: string;
+    username: string;
+    password: string;
+    birthDate: Date;
+    roles: Role[];
+  }
+  ```
+}

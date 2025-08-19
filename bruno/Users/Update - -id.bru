@@ -1,0 +1,38 @@
+meta {
+  name: Update / :id
+  type: http
+  seq: 8
+}
+
+patch {
+  url: {{baseUrl}}/users/:id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: 0198c1d8-724a-7794-9895-81345e06c24f
+}
+
+body:json {
+  {
+    "birthDate": "1996-12-19"
+  }
+}
+
+settings {
+  encodeUrl: true
+}
+
+docs {
+  ### Body DTO
+  ```json
+  {
+    email?: string;
+    username?: string;
+    password?: string;
+    birthDate?: Date;
+    roles?: Role[];
+  }
+  ```
+}

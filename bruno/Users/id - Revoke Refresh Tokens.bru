@@ -1,0 +1,19 @@
+meta {
+  name: :id / Revoke Refresh Tokens
+  type: http
+  seq: 10
+}
+
+post {
+  url: {{baseUrl}}/users/:id/revoke-refresh-tokens
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: 
+}
+
+settings {
+  encodeUrl: true
+}

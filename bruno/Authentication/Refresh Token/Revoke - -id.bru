@@ -1,0 +1,19 @@
+meta {
+  name: Revoke / :id
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/auth/revoke-refresh-token/:id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: 
+}
+
+settings {
+  encodeUrl: true
+}

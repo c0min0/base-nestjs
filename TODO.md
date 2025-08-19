@@ -1,3 +1,0 @@
-- [ ] Provar rutes privades
-- [ ] Afegir gestió de rols
-- [ ] Afegir creació d'admin

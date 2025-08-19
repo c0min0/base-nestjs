@@ -1,0 +1,14 @@
+auth {
+  mode: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+script:post-response {
+  const accessToken = res.headers["access-token"];
+  if (accessToken) {
+    bru.setVar("accessToken", accessToken);
+  }
+}

@@ -1,0 +1,15 @@
+meta {
+  name: Revoke / Self
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/auth/revoke-refresh-token/self
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}

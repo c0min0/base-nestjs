@@ -1,98 +1,123 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# NestJS Base
+[Catalan](./docs/README.ca.md)
+| [Spanish](./docs/README.es.md)
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+This project serves as a base implementation for common elements across different NestJS projects.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+The project is divided into two sections:
 
-## Description
+* `src/common`: Contains constants and utilities shared across the application.
+* `src/modules`: Contains the different feature modules of the application.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Modules
 
-## Project setup
+### ConfigModule
 
-```bash
-$ npm install
-```
+Module responsible for importing **environment variables**.
 
-## Compile and run the project
+Inside `src/common/constants` you’ll find the constants required to type the module configuration.
 
-```bash
-# development
-$ npm run start
+A sample environment file can be found in `.env.sample`.
 
-# watch mode
-$ npm run start:dev
+Environment variables must be placed at the root of the project under the name `.env`.
 
-# production mode
-$ npm run start:prod
-```
+Some variables can be omitted depending on the deployment environment, and they will take default values if not provided. Check the module implementation for more details.
 
-## Run tests
+### DatabaseModule
 
-```bash
-# unit tests
-$ npm run test
+Module responsible for **configuring** and **connecting** to the **database**.
 
-# e2e tests
-$ npm run test:e2e
+This module provides a `TransactionInterceptor` that can be applied at the class or handler level to handle the entire request under the same transaction. Along with it, thanks to the `@InjectTransactionalRepository(Entity)` decorator, you can obtain a repository of the entity defined in the decorator parameters, which will execute actions within the transaction established by the interceptor. This decorator is intended for use in service dependency injection.
 
-# test coverage
-$ npm run test:cov
-```
+### GlobalInterceptorsModule
 
-## Deployment
+Module responsible for **registering global interceptors** that are executed for every request in the application.
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+Thanks to this module, the application has a single global instantiation point for interceptors, making their **execution order** clear and straightforward.
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+### RequestContextModule
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
+Module responsible for handling the **request context**.
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+It includes a **global interceptor** that sets the request context and a **service** that provides access to it.
 
-## Resources
+Both rely on a private service within the module, which must be exported so that when the interceptor is instantiated in the `GlobalInterceptorModule`, it has access to it.
 
-Check out a few resources that may come in handy when working with NestJS:
+### AuthenticationModule
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+Module responsible for **user authentication** when interacting with the API.
 
-## Support
+Authentication is based on **JWT** via the **Authorization header** and a **refresh token** via **httpOnly cookies**.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+This module provides a public endpoint to log in using **username** and **password**.
 
-## Stay in touch
+It also defines the `AuthUser` type, which is important across the application to reference the authenticated user’s information. This information is extracted by the module’s interceptors on any request to a private endpoint and can be accessed via the `@ReqUser()` decorator.
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+The interceptors that inject `AuthUser` into the request are:
 
-## License
+* `LocalAuthenticationInterceptor`: Used in the public login endpoint. It queries the database to obtain user information based on credentials.
+* `JwtAuthenticationInterceptor`: Instantiated globally. It extracts user information from the JWT payload on any route not marked with the `@Public()` decorator from this module. If the token has **expired**, it refreshes the tokens using the refresh token.
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+For the refresh token to be valid, it must:
+
+1. Exist in the database
+2. Not be revoked
+3. Still be valid
+4. Belong to the user in the payload
+5. Belong to the same device as the payload
+6. Not have been used before 
+
+If these conditions are not met, access will be **denied**.
+
+Once the refresh token has been **used**, it is marked as such in the database.
+
+If any of the last three requirements are **not fulfilled**, additionally, for security reasons, **all** active tokens of the **involved users** will be revoked, as this implies an **unauthorized manipulation** of the tokens.
+
+When tokens are **renewed** upon making a request with an **expired JWT** but a **valid refresh token**, the module follows a ***silent refresh*** strategy. The request is responded to successfully as expected, but with the new **access token** included in the **Access-Token** header and the new **refresh token** set in the **refreshToken** cookie.
+
+All logic for handling and modifying refresh tokens is delegated to a submodule called `RefreshTokenModule`.
+
+### AuthorisationModule
+
+Module responsible for checking **role-based permissions** for users to perform **actions** on **resources**.
+
+This module provides several **types** to define user **roles**, available **actions**, and **permissions**.
+
+The `Permissions` type allows defining **resources** and the **actions** that can be performed on them. Typically, resources are domain entities or their partials.
+
+The module exports a **service** with a **configuration object** that defines the permissions each **role** has on a **resource** depending on the **action**.
+
+Each permission in the configuration object can be a simple **boolean** or a **synchronous/asynchronous function** returning a boolean or a promise of a boolean. These functions always have access to the `AuthUser` and the resource defined in the `Permissions` type. This allows for more precise checks, such as whether the authenticated user is the owner of the resource.
+
+To check permissions, the `AuthorisationService` exposes a **method** that takes the action type and the resource (if required for detailed validation via permission functions defined in the configuration object).
+
+This method extracts the `AuthUser` and the resource key (from the `ResourceModule`). If permission is denied, an **exception is thrown**. If granted, a **flag** is set indicating that permissions have been verified.
+
+This flag is useful for the module’s **global interceptor** (`PermissionsValidationInterceptor`), which ensures that private endpoints are not exposed without first verifying user permissions.
+
+The **resource type** that an endpoint will access must be **declared** using this module’s `@AuthorisationResource(Resource)` decorator, which can be applied at the class or handler level.
+
+This module also provides a **factory function** that generates an **interceptor** based on actions (`CreatePermissionGuardInterceptor(Action)`). This is especially useful when all permissions for that action, for that resource type, across all roles are booleans (not functions), so there’s no need to fetch the resource before checking permissions.
+
+### HealthCheckModule
+
+Module responsible for exposing a **public endpoint** to verify whether the API is **reachable**.
+
+### UsersModule
+
+Module responsible for managing the `User` **entity**.
+
+On one hand, it is **used by other modules**, such as `AuthenticationModule` and `AuthorisationModule`. For this reason, `forwardRef(() => Module)` must be used to avoid circular dependencies.
+
+On the other hand, it **exposes several endpoints** to manage both the currently authenticated user’s details as well as other users.
+
+### TodosModule
+
+Module responsible for managing the `Todo` **entity**.
+
+It exposes several **endpoints** to handle records of this entity.
+
+This is the only module in the project that does **not** belong to the reusable **core**. Instead, it serves as **boilerplate**, providing a reference for how to create new modules with **controllers** and **entities linked** together.
+
+## Bruno
+The project contain a [Bruno](https://www.usebruno.com/) collection folder to test the API.

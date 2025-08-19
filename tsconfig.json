@@ -11,11 +11,19 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "paths": {
+      "@utils/*": [
+        "src/common/utils/*"
+      ],
+      "@constants/*": [
+        "src/common/constants/*"
+      ],
+      "@common/*": [
+        "src/common/*"
+      ],
+      "@modules/*": [
+        "src/modules/*"
+      ],
       "@src/*": ["src/*"],
-      "@config/*": ["src/config/*"],
-      "@auth/*": ["src/auth/*"],
-      "@database/*": ["src/database/*"],
-      "@shared/*": ["src/shared/*"],
     },
     "incremental": true,
     "skipLibCheck": true,
